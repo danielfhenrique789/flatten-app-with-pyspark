@@ -9,7 +9,6 @@ import traceback
 
 class FlatteningTransactions(SparkJob):
     def run(self, config):
-        print("✅ Spark Job Completed Successfully")
 
         input_path = config["input_path"]
         output_path = config["output_path"]
