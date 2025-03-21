@@ -18,7 +18,7 @@ SCRIPT_PATH="$SCRIPTS_DIR/$SCRIPT_NAME.sh"
 
 # Check if the script exists
 if [ ! -f "$SCRIPT_PATH" ]; then
-    echo "❌ ERROR: Script '$SCRIPT_NAME.sh' not found in $SCRIPTS_DIR"
+    echo "ERROR: Script '$SCRIPT_NAME.sh' not found in $SCRIPTS_DIR"
     exit 1
 fi
 

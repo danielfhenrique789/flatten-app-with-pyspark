@@ -7,13 +7,13 @@ SQL_FILE="$SCRIPT_DIR/../sql/init.sql"  # Navigate up one level to access sql fo
 
 # Check if exec_db.sh exists
 if [[ ! -f "$EXEC_SCRIPT" ]]; then
-    echo "❌ ERROR: exec_db.sh not found in $SCRIPT_DIR"
+    echo "ERROR: exec_db.sh not found in $SCRIPT_DIR"
     exit 1
 fi
 
 # Check if init.sql exists
 if [[ ! -f "$SQL_FILE" ]]; then
-    echo "❌ ERROR: init.sql not found in $SCRIPT_DIR/../sql/"
+    echo "ERROR: init.sql not found in $SCRIPT_DIR/../sql/"
     exit 1
 fi
 
@@ -30,9 +30,9 @@ for VALUE in "${VALUES[@]}"; do
 
     # Run the command and exit immediately if it fails
     if ! docker-compose run pyspark-app "$VALUE"; then
-        echo "❌ ERROR: Execution failed for $VALUE. Stopping script."
+        echo "ERROR: Execution failed for $VALUE. Stopping script."
         exit 1
     fi
 done
 
-echo "✅ All jobs completed successfully!"
+echo "All jobs completed successfully!"
