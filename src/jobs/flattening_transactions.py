@@ -54,7 +54,6 @@ class FlatteningTransactions(SparkJob):
             df_final = self._format_final_df(df_parsed, column_name, column_name_tt)
 
             # Check final Schema
-            #raise Exception(f"desgracaaa: {df_final.schema}")
             compare_schemas(df_final.schema, transaction_schema)
 
             # Save as Parquet
