@@ -1,7 +1,6 @@
-
 from pyspark.sql.functions import unix_timestamp, monotonically_increasing_id, concat_ws
-from base.spark_job import SparkJob
 from lib.utils import optimize_partitioning
+from base.spark_job import SparkJob
 
 
 class LoadRawData(SparkJob):
