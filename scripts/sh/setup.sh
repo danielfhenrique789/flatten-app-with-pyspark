@@ -23,6 +23,18 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Wait a few seconds to ensure Postgres is ready
+echo "Waiting for PostgreSQL to be ready..."
+sleep 5
+
+# Step 3: Create and initialize database
+echo "🛠Creating database and initializing schema..."
+docker exec -i postgres-db psql -U postgresuser -d postgres < scripts/sql/init.sql
+if [ $? -ne 0 ]; then
+  echo "Failed to initialize the database."
+  exit 1
+fi
+
 # Step 3: Run tests
 echo "Running tests..."
 "$SCRIPT_DIR/run_tests.sh"
