@@ -147,8 +147,8 @@ Add a new entry under the jobs section with the class name as the key. Provide a
 ###Step 3: Add a Save Job (Optional – to persist data)
 
 To write data to PostgreSQL using an existing generic save job:
-	1.	Define a new schema in the schemas/ folder (e.g., new_table.py with new_schema inside).
-	2.	Add a configuration block to config.json for a job starting with Save....
+####1. Define a new schema in the schemas/ folder (e.g., new_table.py with new_schema inside).
+####2. Add a configuration block to config.json for a job starting with Save....
 
 ```json
 "jobs": {
