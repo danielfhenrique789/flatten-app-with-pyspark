@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Define a list of jobs
-JOBS=("LoadRawData" "FlatteningAddress" "FlatteningTransactions" "SaveClient" "SaveAddress" "SaveTransactions")
+JOBS=(
+  "LoadRawData" "FlatteningAddress" "FlatteningTransactions" "SaveClient" "SaveAddress" "SaveTransactions")
 
 # Define the script and SQL file paths
 SCRIPT_DIR="$(dirname "$0")"   # Gets the directory of the current script
@@ -27,12 +28,12 @@ bash "$EXEC_SCRIPT" "$SQL_FILE"
 
 
 # Loop through each value
-for JOBS in "${JOBS[@]}"; do
-    echo "Running JOBS ..."
+for JOB in "${JOBS[@]}"; do
+    echo "Running $JOB ..."
 
     # Run the command and exit immediately if it fails
-    if ! docker-compose run pyspark-app "$JOBS"; then
-        echo "ERROR: Execution failed for $JOBS. Stopping script."
+    if ! docker-compose run pyspark-app "$JOB"; then
+        echo "ERROR: Execution failed for $JOB. Stopping script."
         exit 1
     fi
 done
