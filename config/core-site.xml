@@ -1,0 +1,22 @@
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>file:///</value>
+    </property>
+    <property>
+        <name>hadoop.security.authentication</name>
+        <value>simple</value>
+    </property>
+    <property>
+        <name>hadoop.security.auth_to_local</name>
+        <value>RULE:[1:$1@$0](.*@.*)s/@.*//</value>
+    </property>
+    <property>
+        <name>hadoop.security.kerberos.principal</name>
+        <value></value>
+    </property>
+    <property>
+        <name>hadoop.security.kerberos.keytab</name>
+        <value></value>
+    </property>
+</configuration>

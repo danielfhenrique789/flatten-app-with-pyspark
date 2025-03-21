@@ -1,0 +1,103 @@
+
+services:
+  pyspark-app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./data:/app/data
+    environment:
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - HOME=/opt/bitnami
+      - SPARK_LOCAL_DIRS=/tmp
+      - SPARK_WORKER_DIR=/tmp
+      - HADOOP_USER_NAME=root  # Prevents Kerberos issues
+      - SPARK_USER=root  # Runs Spark with root user (optional)
+      - HADOOP_CONF_DIR=/opt/bitnami/spark/conf  # Ensures Spark doesn't look for HDFS settings
+      - SPARK_OPTS=--conf spark.hadoop.security.authentication=none
+      #- SPARK_LOCAL_IP=127.0.0.1
+      #- SPARK_MASTER_HOST=local
+      - SPARK_JARS_IVY=/tmp/.ivy2
+      - SPARK_OPTS=--conf spark.hadoop.security.authentication=simple
+      - POSTGRES_DB=postgresdb  # Ensure Spark knows the DB name
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_HOST=postgres  # Service name in Docker Compose
+      - POSTGRES_PORT=5432
+    networks:
+      - flatten_app_network
+    ports:
+      - "4040:4040"
+    entrypoint: [
+        "/opt/spark/bin/spark-submit",
+        "--deploy-mode", "client",
+        "--jars", "/opt/spark/jars/postgresql-42.2.27.jar",
+        "--driver-class-path", "/opt/spark/jars/postgresql-42.2.27.jar",
+        "--conf", "spark.executor.extraClassPath=/opt/spark/jars/postgresql-42.2.27.jar",
+        "--conf", "spark.jars.ivy=/tmp/.ivy2",
+        "--conf", "spark.hadoop.security.authentication=simple",
+        "--conf", "spark.hadoop.security.auth_to_local=RULE:[1:$1@$0](.*@.*)s/@.*//",
+        "--conf", "spark.hadoop.security.kerberos.principal=",
+        "--conf", "spark.hadoop.security.kerberos.keytab=",
+        "--conf", "spark.hadoop.fs.defaultFS=file:///",
+        "/app/src/main.py"
+    ]
+
+  pyspark-app-test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./data:/app/data
+    environment:
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - HOME=/opt/bitnami
+      - SPARK_LOCAL_DIRS=/tmp
+      - SPARK_WORKER_DIR=/tmp
+      - HADOOP_USER_NAME=root  # Prevents Kerberos issues
+      - SPARK_USER=root  # Runs Spark with root user (optional)
+      - HADOOP_CONF_DIR=/opt/bitnami/spark/conf  # Ensures Spark doesn't look for HDFS settings
+      - SPARK_OPTS=--conf spark.hadoop.security.authentication=none
+      #- SPARK_LOCAL_IP=127.0.0.1
+      #- SPARK_MASTER_HOST=local
+      - SPARK_JARS_IVY=/tmp/.ivy2
+      - SPARK_OPTS=--conf spark.hadoop.security.authentication=simple
+      - POSTGRES_DB=postgresdb  # Ensure Spark knows the DB name
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_HOST=postgres  # Service name in Docker Compose
+      - POSTGRES_PORT=5432
+      - PYTHONPATH=src
+    networks:
+      - flatten_app_network
+    ports:
+      - "4040:4040"
+    entrypoint: ["pytest", "tests/"]
+#  postgres:
+#    image: postgres:15
+#    container_name: postgres-db
+#    restart: always
+#    environment:
+#      POSTGRES_DB: postgresdb
+#      POSTGRES_USER: postgresuser
+#      POSTGRES_PASSWORD: postgrespassword
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - docker_kafka_network
+#
+#volumes:
+#  postgres_data:
+
+networks:
+  flatten_app_network:
+    driver: bridge

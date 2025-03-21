@@ -1,0 +1,56 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# PyCharm and other IDE settings
+.idea/
+*.iml
+
+# Unit test cache
+.pytest_cache/
+.tox/
+
+# Data files
+data/
+*.csv
+*.tsv
+*.json
+*.log
+
+# PYTHONPATH folders (user-defined path folders)
+**/PYTHONPATH/
+**/pythonpath/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local environment/config
+.env
+*.env
+.env.*.local
+
+# Coverage reports
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+.cache
+.nox/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
