@@ -1,3 +1,8 @@
+-- Drop Database If Exists (Ensures a Fresh Start)
+DROP DATABASE IF EXISTS mydatabase;
+
+-- Create New Database
+CREATE DATABASE mydatabase;
 
 -- Connect to the New Database
 \c mydatabase;
