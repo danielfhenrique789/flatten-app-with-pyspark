@@ -15,8 +15,7 @@ Follow the steps below to configure and run the application:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/flatten-app-with-pyspark.git
-cd flatten-app-with-pyspark
+git clone https://github.com/danielfhenrique789/flatten-app-with-pyspark
 ```
 
 ### 2. Configure Your Environment
