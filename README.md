@@ -73,7 +73,7 @@ Create a file named config.json inside the config/ directory with the following 
 }
 ```
 
-###3. Run setup
+### 3. Run setup
 
 Use the helper script to setup your environment:
 ```bash
@@ -95,7 +95,7 @@ flatten-app-with-pyspark/
 ```
 
 
-###5. Run the Pipeline
+### 5. Run the Pipeline
 
 Use the helper script to execute the pipeline:
 ```bash
@@ -105,7 +105,7 @@ This script will:
 - Run all PySpark jobs in sequence
 - Load the final data into PostgreSQL
 
-###6. Postgres shell
+### 6. Postgres shell
 
 Use the helper script to access the postgres container:
 ```bash
@@ -144,13 +144,13 @@ Add a new entry under the jobs section with the class name as the key. Provide a
   }
 }
 ```
-###Step 3: Add a Save Job (Optional – to persist data)
+### Step 3: Add a Save Job (Optional – to persist data)
 
 To write data to PostgreSQL using an existing generic save job:
 
-###1. Define a new schema in the schemas/ folder (e.g., new_table.py with new_schema inside).
+#### 1. Define a new schema in the schemas/ folder (e.g., new_table.py with new_schema inside).
 
-###2. Add a configuration block to config.json for a job starting with Save....
+#### 2. Add a configuration block to config.json for a job starting with Save....
 
 ```json
 "jobs": {
@@ -165,14 +165,14 @@ To write data to PostgreSQL using an existing generic save job:
 ```
 ⚠️ You do not need to create a new job file for SaveNewTable. The generic save logic handles it using the configuration above.
 
-###Step 4: Run Your Job
+### Step 4: Run Your Job
 
 To run a single job independently:
 ```bash
 ./app.sh --run MyJobName
 ```
 
-###Step 5: Add Job to Pipeline (Optional)
+### Step 5: Add Job to Pipeline (Optional)
 
 If you’d like your job to run as part of the full pipeline, add the job name to the JOBS list in the script scripts/sh/run_pipeline.sh.
 
@@ -224,7 +224,7 @@ This project implements a modular, scalable data pipeline built with **Apache Sp
 
 This design enables efficient development, debugging, and scaling of Spark-based data workflows, making it suitable for both local development and cloud deployment.
 
-##Project Structure
+## Project Structure
 ```bash
 .
 ├── config/             # Configuration files (JSON)
@@ -238,7 +238,7 @@ This design enables efficient development, debugging, and scaling of Spark-based
 └── README.md
 ```
 
-####Notes
+#### Notes
 	•	All database tables and schemas are managed by init.sql in scripts/sql/.
 	•	Jobs are configured dynamically based on config.json.
 	•	PostgreSQL is used for persistence; credentials and URLs are defined in the configuration file.
