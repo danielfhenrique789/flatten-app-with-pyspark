@@ -17,4 +17,4 @@ JOB_NAME="$1"
 shift  # Shift arguments so any extras can be passed
 
 echo "🚀 Running Spark Job: $JOB_NAME ..."
-docker-compose run --rm pyspark-app "$JOB_NAME" "$@"
+docker-compose run --rm --name pyspark-app --service-ports pyspark-app "$JOB_NAME" "$@"

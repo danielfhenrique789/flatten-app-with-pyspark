@@ -16,7 +16,7 @@ def main():
     # Initialize Spark session
     spark = SparkSession.builder \
         .appName(job_name) \
-        .master("local[*]") \
+        .master("spark://spark-master:7077") \
         .getOrCreate()
 
     # Dynamically instantiate and run job
