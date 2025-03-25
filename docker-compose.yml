@@ -3,12 +3,16 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    container_name: pyspark-app
     working_dir: /app
+    user: "0:0"
     volumes:
+      - ~/.ivy2/tmp:/tmp/.ivy2
       - ./config:/app/config
       - ./src:/app/src
       - ./data:/app/data
       - ./scripts:/app/scripts
+      - shared-data:/app/data
     environment:
       - SPARK_MASTER_URL=spark://spark-master:7077
       - HOME=/opt/bitnami
@@ -19,11 +23,15 @@ services:
       - HADOOP_CONF_DIR=/opt/bitnami/spark/conf
       - SPARK_JARS_IVY=/tmp/.ivy2
       - SPARK_OPTS=--conf spark.hadoop.security.authentication=simple
+      - PYSPARK_PYTHON=python3.12
+      - PYSPARK_DRIVER_PYTHON=python3.12
     networks:
       - flatten_app_network
+      - cluster_network
     ports:
       - "4040:4040"
-    entrypoint: ["bash", "scripts/sh/run_spark.sh"]
+    entrypoint: ["sh", "-c", "sh scripts/sh/run_spark.sh \"$@\"", "--"]
+#    entrypoint: ["bash"]
 
   pyspark-app-test:
     build:
@@ -35,6 +43,7 @@ services:
       - ./src:/app/src
       - ./tests:/app/tests
       - ./data:/app/data
+      - shared-data:/app/data
     environment:
       - SPARK_MASTER_URL=spark://spark-master:7077
       - HOME=/opt/bitnami
@@ -45,13 +54,20 @@ services:
       - HADOOP_CONF_DIR=/opt/bitnami/spark/conf
       - SPARK_JARS_IVY=/tmp/.ivy2
       - SPARK_OPTS=--conf spark.hadoop.security.authentication=simple
+      - PYSPARK_PYTHON=python3.12
+      - PYSPARK_DRIVER_PYTHON=python3.12
       - PYTHONPATH=src
     networks:
       - flatten_app_network
-    ports:
-      - "4040:4040"
+      - cluster_network
     entrypoint: ["pytest", "tests/"]
+
+volumes:
+  shared-data:
+    external: true
 
 networks:
   flatten_app_network:
     driver: bridge
+  cluster_network:
+    external: true

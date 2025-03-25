@@ -12,11 +12,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - flatten_app_network
+      - cluster_network
 
 volumes:
   postgres_data:
 
 networks:
-  flatten_app_network:
-    driver: bridge
+  cluster_network:
+    external: true

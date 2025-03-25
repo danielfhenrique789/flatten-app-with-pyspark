@@ -14,19 +14,54 @@ ENV SPARK_OPTS=--conf spark.hadoop.security.authentication=simple
 ENV PYTHONPATH=/app
 # Add ~/.local/bin to PATH for user-installed packages like pytest
 ENV PATH=$PATH:/home/spark/.local/bin
+ENV PYSPARK_PYTHON=python3.12
+ENV PYSPARK_DRIVER_PYTHON=python3.12
 
 # Create writable directories for PySpark dependencies
 RUN mkdir -p /tmp/.ivy2 /opt/spark/work && chmod -R 777 /tmp/.ivy2 /opt/spark/work
 
 # Switch to root temporarily to install packages
 USER root
-RUN apt-get update && apt-get install -y python3-pip
+RUN apt-get update && \
+    apt-get install -y software-properties-common curl && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y python3.12 python3.12-venv python3-pip && \
+    ln -sf /usr/bin/python3.12 /usr/bin/python && \
+    ln -sf /usr/bin/python3.12 /usr/bin/python3
 
 
 # Install PySpark in the user directory
-RUN pip install --upgrade --user pip && pip install pyspark
+# Use python3.12’s pip to install packages
+RUN apt-get update && \
+    apt-get install -y \
+        build-essential \
+        libssl-dev \
+        zlib1g-dev \
+        libncurses5-dev \
+        libncursesw5-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libgdbm-dev \
+        libdb5.3-dev \
+        libbz2-dev \
+        libexpat1-dev \
+        liblzma-dev \
+        libffi-dev \
+        wget && \
+    wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz && \
+    tar -xf Python-3.12.2.tgz && \
+    cd Python-3.12.2 && \
+    ./configure --enable-optimizations && \
+    make -j$(nproc) && \
+    make altinstall && \
+    ln -sf /usr/local/bin/python3.12 /usr/bin/python && \
+    ln -sf /usr/local/bin/pip3.12 /usr/bin/pip
 
-RUN pip install pytest
+# Install Python packages
+RUN pip install --upgrade pip && pip install pyspark pytest
+
+#RUN pip install pytest
 
 # Download PostgreSQL JDBC Driver
 RUN wget -q https://jdbc.postgresql.org/download/postgresql-42.2.27.jar -P /opt/spark/jars/
@@ -39,6 +74,8 @@ USER spark
 
 # Set working directory
 WORKDIR /app
+
+RUN mkdir -p /app/data && chmod -R 777 /app/data
 
 # Copy application files
 COPY src/ src/
